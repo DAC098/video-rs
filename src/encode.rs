@@ -381,11 +381,17 @@ impl Drop for Encoder {
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum Kind {
+    #[allow(non_camel_case_types)]
     libx264,
+    #[allow(non_camel_case_types)]
     libx264rgb,
+    #[allow(non_camel_case_types)]
     h264_nvenc,
+    #[allow(non_camel_case_types)]
     h264_v4l2m2m,
+    #[allow(non_camel_case_types)]
     h264_vaapai,
 }
 
