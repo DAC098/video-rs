@@ -381,6 +381,26 @@ impl Drop for Encoder {
     }
 }
 
+pub enum Kind {
+    libx264,
+    libx264rgb,
+    h264_nvenc,
+    h264_v4l2m2m,
+    h264_vaapai,
+}
+
+impl Kind {
+    fn as_str(&self) -> &str {
+        match self {
+            Self::libx264 => "libx264",
+            Self::libx264rgb => "libx264rgb",
+            Self::h264_nvenc => "h264_nvenc",
+            Self::h264_v4l2m2m => "h264_v4l2m2m",
+            Self::h264_vaapai => "h264_vaapai",
+        }
+    }
+}
+
 /// Holds a logical combination of encoder settings.
 #[derive(Debug, Clone)]
 pub struct Settings {
@@ -388,6 +408,7 @@ pub struct Settings {
     height: u32,
     pixel_format: AvPixel,
     keyframe_interval: u64,
+    encoder: Kind,
     options: Options,
 }
 
@@ -414,6 +435,7 @@ impl Settings {
             height: height as u32,
             pixel_format: AvPixel::YUV420P,
             keyframe_interval: Self::KEY_FRAME_INTERVAL,
+            encoder: Kind::libx264,
             options,
         }
     }
@@ -443,6 +465,7 @@ impl Settings {
             height: height as u32,
             pixel_format,
             keyframe_interval: Self::KEY_FRAME_INTERVAL,
+            encoder: Kind::libx264,
             options,
         }
     }
@@ -479,7 +502,7 @@ impl Settings {
         // Try to use the libx264 decoder. If it is not available, then use use whatever default
         // h264 decoder we have.
         Some(
-            ffmpeg::encoder::find_by_name("libx264")
+            ffmpeg::encoder::find_by_name(self.encoder.as_str())
                 .unwrap_or(ffmpeg::encoder::find(AvCodecId::H264)?),
         )
     }
