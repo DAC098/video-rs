@@ -487,6 +487,17 @@ impl Settings {
         self
     }
 
+    /// Set the encoder kind
+    pub fn set_encoder_kind(&mut self, kind: Kind) {
+        self.kind = kind;
+    }
+
+    /// Set the encoder kind
+    pub fn with_encoder_kind(mut self, kind: Kind) -> Self {
+        self.kind = kind;
+        self
+    }
+
     /// Apply the settings to an encoder.
     ///
     /// # Arguments
