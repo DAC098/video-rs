@@ -414,7 +414,7 @@ pub struct Settings {
     height: u32,
     pixel_format: AvPixel,
     keyframe_interval: u64,
-    encoder: Kind,
+    kind: Kind,
     options: Options,
 }
 
@@ -441,7 +441,7 @@ impl Settings {
             height: height as u32,
             pixel_format: AvPixel::YUV420P,
             keyframe_interval: Self::KEY_FRAME_INTERVAL,
-            encoder: Kind::libx264,
+            kind: Kind::libx264,
             options,
         }
     }
@@ -471,7 +471,7 @@ impl Settings {
             height: height as u32,
             pixel_format,
             keyframe_interval: Self::KEY_FRAME_INTERVAL,
-            encoder: Kind::libx264,
+            kind: Kind::libx264,
             options,
         }
     }
@@ -519,7 +519,7 @@ impl Settings {
         // Try to use the libx264 decoder. If it is not available, then use use whatever default
         // h264 decoder we have.
         Some(
-            ffmpeg::encoder::find_by_name(self.encoder.as_str())
+            ffmpeg::encoder::find_by_name(self.kind.as_str())
                 .unwrap_or(ffmpeg::encoder::find(AvCodecId::H264)?),
         )
     }
